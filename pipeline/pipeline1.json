@@ -17,6 +17,12 @@
 				"typeProperties": {
 					"enableStaging": false
 				}
+			},
+			{
+				"name": "Set variable1",
+				"type": "SetVariable",
+				"dependsOn": [],
+				"userProperties": []
 			}
 		],
 		"annotations": []
