@@ -1,0 +1,9 @@
+{
+	"name": "data-factory-az-test",
+	"location": "westus2",
+	"identity": {
+		"type": "SystemAssigned",
+		"principalId": "90a3b62e-0814-4d91-8bc2-f3a722620ee6",
+		"tenantId": "46c98d88-e344-4ed4-8496-4ed7712e255d"
+	}
+}
