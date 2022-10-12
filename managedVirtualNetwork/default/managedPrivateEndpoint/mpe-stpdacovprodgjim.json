@@ -1,0 +1,7 @@
+{
+	"name": "mpe-stpdacovprodgjim",
+	"properties": {
+		"privateLinkResourceId": "/subscriptions/9c422518-49e0-49ba-a2cd-24287e25878f/resourceGroups/rg-pdacov-prod-gjim/providers/Microsoft.Storage/storageAccounts/stpdacovprodgjim",
+		"groupId": "dfs"
+	}
+}

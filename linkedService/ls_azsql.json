@@ -1,0 +1,40 @@
+{
+	"name": "ls_azsql",
+	"type": "Microsoft.DataFactory/factories/linkedservices",
+	"properties": {
+		"parameters": {
+			"server_name": {
+				"type": "String"
+			},
+			"db_name": {
+				"type": "String"
+			},
+			"admin_name": {
+				"type": "String"
+			},
+			"secret_name": {
+				"type": "String"
+			}
+		},
+		"annotations": [],
+		"type": "AzureSqlDatabase",
+		"typeProperties": {
+			"connectionString": "Integrated Security=False;Encrypt=True;Connection Timeout=30;Data Source=@{linkedService().server_name};Initial Catalog=@{linkedService().db_name};User ID=@{linkedService().admin_name}",
+			"password": {
+				"type": "AzureKeyVaultSecret",
+				"store": {
+					"referenceName": "kv_iac_dev",
+					"type": "LinkedServiceReference"
+				},
+				"secretName": {
+					"value": "@linkedService().secret_name",
+					"type": "Expression"
+				}
+			}
+		},
+		"connectVia": {
+			"referenceName": "ir-azure-westus2",
+			"type": "IntegrationRuntimeReference"
+		}
+	}
+}
