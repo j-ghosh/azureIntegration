@@ -1,0 +1,6 @@
+{
+	"name": "df-az-ir-test",
+	"properties": {
+		"type": "SelfHosted"
+	}
+}

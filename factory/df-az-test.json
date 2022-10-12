@@ -1,0 +1,9 @@
+{
+	"name": "df-az-test",
+	"location": "westus2",
+	"identity": {
+		"type": "SystemAssigned",
+		"principalId": "de623488-f0f4-4045-82b7-b9afbc894a2a",
+		"tenantId": "46c98d88-e344-4ed4-8496-4ed7712e255d"
+	}
+}
