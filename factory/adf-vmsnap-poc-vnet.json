@@ -1,0 +1,9 @@
+{
+	"name": "adf-vmsnap-poc-vnet",
+	"location": "westus2",
+	"identity": {
+		"type": "SystemAssigned",
+		"principalId": "49be4d1a-4753-403c-8adc-91f839da1765",
+		"tenantId": "46c98d88-e344-4ed4-8496-4ed7712e255d"
+	}
+}

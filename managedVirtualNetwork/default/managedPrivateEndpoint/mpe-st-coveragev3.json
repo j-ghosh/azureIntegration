@@ -1,0 +1,7 @@
+{
+	"name": "mpe-st-coveragev3",
+	"properties": {
+		"privateLinkResourceId": "/subscriptions/e54d0018-47e8-45df-bb63-ff841f24a811/resourceGroups/pda_coverage_analytics_exploration/providers/Microsoft.Storage/storageAccounts/coveragestoragev3",
+		"groupId": "dfs"
+	}
+}

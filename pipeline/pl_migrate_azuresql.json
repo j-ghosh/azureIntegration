@@ -1,0 +1,214 @@
+{
+	"name": "pl_migrate_azuresql",
+	"properties": {
+		"activities": [
+			{
+				"name": "script_azuresql",
+				"description": "",
+				"type": "Script",
+				"dependsOn": [],
+				"policy": {
+					"timeout": "0.12:00:00",
+					"retry": 0,
+					"retryIntervalInSeconds": 30,
+					"secureOutput": false,
+					"secureInput": false
+				},
+				"userProperties": [],
+				"linkedServiceName": {
+					"referenceName": "ls_azsql",
+					"type": "LinkedServiceReference",
+					"parameters": {
+						"server_name": {
+							"value": "@pipeline().parameters.source_server_name",
+							"type": "Expression"
+						},
+						"db_name": {
+							"value": "@pipeline().parameters.source_db_name",
+							"type": "Expression"
+						},
+						"admin_name": {
+							"value": "@pipeline().parameters.source_admin_name",
+							"type": "Expression"
+						},
+						"secret_name": {
+							"value": "@pipeline().parameters.source_secret_name",
+							"type": "Expression"
+						}
+					}
+				},
+				"typeProperties": {
+					"scripts": [
+						{
+							"type": "Query",
+							"text": "\nselect TABLE_SCHEMA, TABLE_NAME from INFORMATION_SCHEMA.TABLES\nwhere TABLE_TYPE = 'BASE TABLE'"
+						}
+					]
+				}
+			},
+			{
+				"name": "foreach",
+				"type": "ForEach",
+				"dependsOn": [
+					{
+						"activity": "script_azuresql",
+						"dependencyConditions": [
+							"Succeeded"
+						]
+					}
+				],
+				"userProperties": [],
+				"typeProperties": {
+					"items": {
+						"value": "@activity('script_azuresql').output.resultSets[0].rows",
+						"type": "Expression"
+					},
+					"isSequential": false,
+					"batchCount": 10,
+					"activities": [
+						{
+							"name": "cp_azsql",
+							"type": "Copy",
+							"dependsOn": [],
+							"policy": {
+								"timeout": "0.12:00:00",
+								"retry": 0,
+								"retryIntervalInSeconds": 30,
+								"secureOutput": false,
+								"secureInput": false
+							},
+							"userProperties": [],
+							"typeProperties": {
+								"source": {
+									"type": "AzureSqlSource",
+									"queryTimeout": "02:00:00",
+									"partitionOption": "None"
+								},
+								"sink": {
+									"type": "AzureSqlSink",
+									"preCopyScript": {
+										"value": "@{concat('truncate table ', item().TABLE_SCHEMA, '.', item().TABLE_NAME)}",
+										"type": "Expression"
+									},
+									"writeBehavior": "insert",
+									"sqlWriterUseTableLock": false,
+									"disableMetricsCollection": true
+								},
+								"enableStaging": false,
+								"translator": {
+									"type": "TabularTranslator",
+									"typeConversion": true,
+									"typeConversionSettings": {
+										"allowDataTruncation": true,
+										"treatBooleanAsNumber": false
+									}
+								}
+							},
+							"inputs": [
+								{
+									"referenceName": "ds_azsql_query",
+									"type": "DatasetReference",
+									"parameters": {
+										"schema_name": {
+											"value": "@item().TABLE_SCHEMA",
+											"type": "Expression"
+										},
+										"table_name": {
+											"value": "@item().TABLE_NAME",
+											"type": "Expression"
+										},
+										"server_name": {
+											"value": "@pipeline().parameters.source_server_name",
+											"type": "Expression"
+										},
+										"db_name": {
+											"value": "@pipeline().parameters.source_db_name",
+											"type": "Expression"
+										},
+										"admin_name": {
+											"value": "@pipeline().parameters.source_admin_name",
+											"type": "Expression"
+										},
+										"secret_name": {
+											"value": "@pipeline().parameters.source_secret_name",
+											"type": "Expression"
+										}
+									}
+								}
+							],
+							"outputs": [
+								{
+									"referenceName": "ds_azsql_query",
+									"type": "DatasetReference",
+									"parameters": {
+										"schema_name": {
+											"value": "@item().TABLE_SCHEMA",
+											"type": "Expression"
+										},
+										"table_name": {
+											"value": "@item().TABLE_NAME",
+											"type": "Expression"
+										},
+										"server_name": {
+											"value": "@pipeline().parameters.target_server_name",
+											"type": "Expression"
+										},
+										"db_name": {
+											"value": "@pipeline().parameters.target_db_name",
+											"type": "Expression"
+										},
+										"admin_name": {
+											"value": "@pipeline().parameters.target_admin_name",
+											"type": "Expression"
+										},
+										"secret_name": {
+											"value": "@pipeline().parameters.target_secret_name",
+											"type": "Expression"
+										}
+									}
+								}
+							]
+						}
+					]
+				}
+			}
+		],
+		"parameters": {
+			"source_server_name": {
+				"type": "String",
+				"defaultValue": "coverage-db-server.database.windows.net"
+			},
+			"source_db_name": {
+				"type": "String",
+				"defaultValue": "coveragev3-db-cold"
+			},
+			"source_admin_name": {
+				"type": "String",
+				"defaultValue": "pda_admin"
+			},
+			"source_secret_name": {
+				"type": "String",
+				"defaultValue": "adf-migration-source-db-password"
+			},
+			"target_server_name": {
+				"type": "string",
+				"defaultValue": "sql-pdacov-prod-gjim.database.windows.net"
+			},
+			"target_db_name": {
+				"type": "string",
+				"defaultValue": "sqldb-pdacov-cold-prod-gjim"
+			},
+			"target_admin_name": {
+				"type": "string",
+				"defaultValue": "adpadminuser"
+			},
+			"target_secret_name": {
+				"type": "string",
+				"defaultValue": "adf-migration-target-db-password"
+			}
+		},
+		"annotations": [],
+		"lastPublishTime": "2022-09-06T03:33:17Z"
+	},
+	"type": "Microsoft.DataFactory/factories/pipelines"
+}

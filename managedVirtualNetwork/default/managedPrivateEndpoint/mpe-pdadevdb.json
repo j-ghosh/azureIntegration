@@ -1,0 +1,10 @@
+{
+	"name": "mpe-pdadevdb",
+	"properties": {
+		"privateLinkResourceId": "/subscriptions/e54d0018-47e8-45df-bb63-ff841f24a811/resourceGroups/pda_coverage_analytics_exploration/providers/Microsoft.Sql/servers/coverage-db-server",
+		"groupId": "sqlServer",
+		"fqdns": [
+			"coverage-db-server.database.windows.net"
+		]
+	}
+}

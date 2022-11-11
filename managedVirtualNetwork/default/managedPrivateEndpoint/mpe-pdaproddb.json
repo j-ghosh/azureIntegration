@@ -1,0 +1,10 @@
+{
+	"name": "mpe-pdaproddb",
+	"properties": {
+		"privateLinkResourceId": "/subscriptions/9c422518-49e0-49ba-a2cd-24287e25878f/resourceGroups/rg-pdacov-prod-gjim/providers/Microsoft.Sql/servers/sql-pdacov-prod-gjim",
+		"groupId": "sqlServer",
+		"fqdns": [
+			"sql-pdacov-prod-gjim.database.windows.net"
+		]
+	}
+}
